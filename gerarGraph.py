@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 
+
 class WeightedDirectedGraph:
 
   def __init__(self):
@@ -8,7 +9,7 @@ class WeightedDirectedGraph:
 
   def add_edge(self, source, sink, weight):
     if source not in self.adjList:
-      self.adjList[source] = dict()
+      self.adjList[source] = {}
     self.adjList[source][sink] = weight
 
 
@@ -25,6 +26,24 @@ class Graph:
     if sink not in self.adjList:
       self.adjList[sink] = set()
     self.adjList[sink].add(source)
+
+  def remove_edge(self, u, v):
+    if u in self.adjList and v in self.adjList:
+      self.adjList[u].discard(v)
+      self.adjList[v].discard(u)
+
+  def degree(self, u):
+    return len(self.adjList[u])
+
+  def highest_degree(self):
+    if not self.adjList:
+      return None
+    return max(self.adjList, key=self.degree)
+
+  def is_Completed(self):
+    nodes = len(self.adjList)
+    return all(len(neighbors) == nodes - 1
+               for neighbors in self.adjList.values())
 
 
 def plot_weighted_directed_graph(custom_graph):
@@ -71,31 +90,5 @@ def plot_undirected_graph(custom_graph):
       font_weight='bold',
   )
 
-  plt.title('Grafo Não-Direcionado')
+  plt.title('Grafo NÃ£o-Direcionado')
   plt.show()
-
-
-# --- Exemplo de uso ---
-
-# 1. Grafo Direcionado Ponderado
-gPond = WeightedDirectedGraph()
-gPond.add_edge('A', 'B', 4)
-gPond.add_edge('A', 'C', 2)
-gPond.add_edge('B', 'C', 1)
-gPond.add_edge('B', 'D', 5)
-gPond.add_edge('C', 'D', 8)
-gPond.add_edge('C', 'E', 10)
-gPond.add_edge('D', 'E', 2)
-gPond.add_edge('E', 'A', 7)
-
-plot_weighted_directed_graph(gPond)
-
-
-# 2. Grafo Não-Direcionado
-g = Graph()
-g.add_edge(0,1)
-g.add_edge(0,2)
-g.add_edge(0,3)
-g.add_edge(1,3)
-
-plot_undirected_graph(g)
